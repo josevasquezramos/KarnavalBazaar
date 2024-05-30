@@ -2,38 +2,39 @@ package com.karnaval.servicio;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.karnaval.entidad.Compra;
+import com.karnaval.repositorio.CompraRepository;
 
 public class CompraServiceImpl implements CompraService {
 
+	@Autowired
+	private CompraRepository compraRepository;
+
 	@Override
 	public Compra agregar(Compra entidad) {
-		// TODO Auto-generated method stub
-		return null;
+		return compraRepository.save(entidad);
 	}
 
 	@Override
 	public List<Compra> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return compraRepository.findAll();
 	}
 
 	@Override
 	public Compra buscar(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return compraRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public Compra actualizar(Compra entidad) {
-		// TODO Auto-generated method stub
-		return null;
+		return compraRepository.save(entidad);
 	}
 
 	@Override
 	public void eliminar(Long id) {
-		// TODO Auto-generated method stub
-		
+		compraRepository.deleteById(id);
 	}
 
 }

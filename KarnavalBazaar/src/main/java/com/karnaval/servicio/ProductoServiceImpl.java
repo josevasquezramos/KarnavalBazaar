@@ -2,38 +2,39 @@ package com.karnaval.servicio;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.karnaval.entidad.Producto;
+import com.karnaval.repositorio.ProductoRepository;
 
 public class ProductoServiceImpl implements ProductoService {
 
+	@Autowired
+	private ProductoRepository productoRepository;
+
 	@Override
 	public Producto agregar(Producto entidad) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.save(entidad);
 	}
 
 	@Override
 	public List<Producto> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findAll();
 	}
 
 	@Override
 	public Producto buscar(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public Producto actualizar(Producto entidad) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.save(entidad);
 	}
 
 	@Override
 	public void eliminar(Long id) {
-		// TODO Auto-generated method stub
-		
+		productoRepository.deleteById(id);
 	}
 
 }

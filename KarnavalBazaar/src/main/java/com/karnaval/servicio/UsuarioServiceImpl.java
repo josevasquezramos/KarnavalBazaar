@@ -11,7 +11,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-	// @Autowired private PasswordEncoder passwordEncoder;
+	// @Autowired
+	// private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Usuario agregar(Usuario entidad) {

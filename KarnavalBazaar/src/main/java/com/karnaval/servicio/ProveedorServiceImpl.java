@@ -2,38 +2,39 @@ package com.karnaval.servicio;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.karnaval.entidad.Proveedor;
+import com.karnaval.repositorio.ProveedorRepository;
 
 public class ProveedorServiceImpl implements ProveedorService {
 
+	@Autowired
+	private ProveedorRepository proveedorRepository;
+
 	@Override
 	public Proveedor agregar(Proveedor entidad) {
-		// TODO Auto-generated method stub
-		return null;
+		return proveedorRepository.save(entidad);
 	}
 
 	@Override
 	public List<Proveedor> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return proveedorRepository.findAll();
 	}
 
 	@Override
 	public Proveedor buscar(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return proveedorRepository.findById(id).orElse(null);
 	}
 
 	@Override
 	public Proveedor actualizar(Proveedor entidad) {
-		// TODO Auto-generated method stub
-		return null;
+		return proveedorRepository.save(entidad);
 	}
 
 	@Override
 	public void eliminar(Long id) {
-		// TODO Auto-generated method stub
-		
+		proveedorRepository.deleteById(id);
 	}
 
 }
