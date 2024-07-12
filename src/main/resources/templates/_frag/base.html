@@ -1,0 +1,21 @@
+<head th:fragment="site-head">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bazar El Karnaval</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<header class="header-mobile" th:fragment="site-header">
+	<h1 class="logo">Bazar El Karnaval</h1>
+	<button class="open-menu" id="open-menu">
+		  	<i class="bi bi-list"></i>
+	</button>
+</header>
+
+<div th:fragment = "site-scripts"> 
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	<script th:src="@{/js/menu.js}"></script>
+</div>
