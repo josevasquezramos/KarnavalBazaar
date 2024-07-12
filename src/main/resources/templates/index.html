@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <button class="close-menu" id="close-menu">
+                <i class="bi bi-x"></i>
+            </button>
+            <header>
+                <h1 class="logo">Bazar El Karnaval</h1>
+            </header>
+            <nav>
+                <ul class="menu">
+                    <li>
+                        <button id="todos" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i> Todos los productos</button>
+                    </li>
+                    <li>
+                        <button id="abrigos" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i> Abrigos</button>
+                    </li>
+                    <li>
+                        <button id="camisetas" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i> Camisetas</button>
+                    </li>
+                    <li>
+                        <button id="pantalones" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i> Pantalones</button>
+                    </li>
+                    <li>
+                        <a class="boton-menu boton-carrito" th:href="@{/shoopingCar/openCar}">
+                            <i class="bi bi-cart-fill"></i> Carrito <span id="numerito" class="numerito">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <footer>
+                <p class="texto-footer">© 2024 GRUPO APRTV</p>
+            </footer>
+        </aside>
+        <main>
+            <h2 class="titulo-principal" id="titulo-principal">Todos los productos</h2>
+            <div id="contenedor-productos" class="contenedor-productos">
+                <!-- Esto se va a rellenar con JS -->
+            </div>
+        </main>
+    </div>
+    
+	<div th:replace="~{_frag/base::site-scripts}"></div>
+    <script th:src="@{/js/main.js}"></script>
+	
+</body>
+</html>
