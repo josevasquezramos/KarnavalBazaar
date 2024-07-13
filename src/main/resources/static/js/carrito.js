@@ -1,3 +1,5 @@
+import KEYS from "./keys.js"
+
 let productosEnCarrito = localStorage.getItem("productos-en-carrito");
 productosEnCarrito = JSON.parse(productosEnCarrito);
 
@@ -20,16 +22,19 @@ function cargarProductosCarrito() {
         contenedorCarritoComprado.classList.add("disabled");
     
         contenedorCarritoProductos.innerHTML = "";
-    
+        
+        let cantidadTotalProductos = 0;
+		
         productosEnCarrito.forEach(producto => {
     
             const div = document.createElement("div");
+            
             div.classList.add("carrito-producto");
             div.innerHTML = `
-                <img class="carrito-producto-imagen" src="${producto.imagen}" alt="${producto.titulo}">
+                <img class="carrito-producto-imagen" src="${producto.images}" alt="${producto.name}">
                 <div class="carrito-producto-titulo">
                     <small>Título</small>
-                    <h3>${producto.titulo}</h3>
+                    <h3>${producto.name}</h3>
                 </div>
                 <div class="carrito-producto-cantidad">
                     <small>Cantidad</small>
@@ -37,16 +42,20 @@ function cargarProductosCarrito() {
                 </div>
                 <div class="carrito-producto-precio">
                     <small>Precio</small>
-                    <p>$${producto.precio}</p>
+                    <p>S/. ${producto.precio}</p>
                 </div>
                 <div class="carrito-producto-subtotal">
                     <small>Subtotal</small>
-                    <p>$${producto.precio * producto.cantidad}</p>
+                    <p>${producto.precio * producto.cantidad}</p>
                 </div>
                 <button class="carrito-producto-eliminar" id="${producto.id}"><i class="bi bi-trash-fill"></i></button>
             `;
     
             contenedorCarritoProductos.append(div);
+            
+            cantidadTotalProductos += producto.cantidad;
+            
+            getCantidadTotalProductos(cantidadTotalProductos);
         })
     
     actualizarBotonesEliminar();
@@ -59,6 +68,13 @@ function cargarProductosCarrito() {
         contenedorCarritoComprado.classList.add("disabled");
     }
 
+}
+
+function getCantidadTotalProductos(cantidadTotal) {
+    const elementoTotalProductos = document.getElementById("cantidad-total-productos");
+    if (elementoTotalProductos) {
+        elementoTotalProductos.textContent = cantidadTotal.toString();
+    }
 }
 
 cargarProductosCarrito();
@@ -76,9 +92,9 @@ function eliminarDelCarrito(e) {
         text: "Producto eliminado",
         duration: 3000,
         close: true,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
         style: {
           background: "linear-gradient(to right, #4b33a8, #785ce9)",
           borderRadius: "2rem",
@@ -86,10 +102,10 @@ function eliminarDelCarrito(e) {
           fontSize: ".75rem"
         },
         offset: {
-            x: '1.5rem', // horizontal axis - can be a number or a string indicating unity. eg: '2em'
-            y: '1.5rem' // vertical axis - can be a number or a string indicating unity. eg: '2em'
+            x: '1.5rem',
+            y: '1.5rem'
           },
-        onClick: function(){} // Callback after click
+        onClick: function(){}
       }).showToast();
 
     const idBoton = e.currentTarget.id;
@@ -122,15 +138,34 @@ function vaciarCarrito() {
       })
 }
 
-
 function actualizarTotal() {
     const totalCalculado = productosEnCarrito.reduce((acc, producto) => acc + (producto.precio * producto.cantidad), 0);
-    total.innerText = `$${totalCalculado}`;
+    total.innerText = 'S/. '+`${totalCalculado}`;
 }
 
 botonComprar.addEventListener("click", comprarCarrito);
 function comprarCarrito() {
+    const lineItems = productosEnCarrito.map(producto => ({
+        price: String(producto.id_precio),
+        quantity: producto.cantidad,
+    }));
 
+    Stripe(KEYS.public).redirectToCheckout({
+        lineItems: lineItems,
+        mode: "subscription",
+        successUrl: 'http://localhost:8080/message-responses/openSuccess',
+        cancelUrl: 'http://localhost:8080/message-responses/openCancel',
+    })
+    .then(res => {
+        if (res.error) {
+            document.getElementById("carrito-vacio").insertAdjacentElement("afterend", res.error.message);
+        } else {
+            productosEnCarrito.length = 0;
+            localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+            cargarProductosCarrito();
+        }
+    });
+    
     productosEnCarrito.length = 0;
     localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
     
@@ -138,5 +173,4 @@ function comprarCarrito() {
     contenedorCarritoProductos.classList.add("disabled");
     contenedorCarritoAcciones.classList.add("disabled");
     contenedorCarritoComprado.classList.remove("disabled");
-
 }
