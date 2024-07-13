@@ -6,7 +6,7 @@ const $template = $d.getElementById("section-productos").content;
 const $fragment = $d.createDocumentFragment();
 const options = { headers: {Authorization: `Bearer ${KEYS.secret}`}}
 
-const FormatoDeMoneda = num => `S/. ${num.slice(0, -2)}.${num.slice(-2)}`;
+const FormatoDeMoneda = num => `${num.slice(0, -2)}.${num.slice(-2)}`;
 
 let products, prices;
 
@@ -28,8 +28,6 @@ Promise.all([
 
 
 function cargarProductos(productosElegidos) {
-	console.log(productosElegidos);
-	console.log(prices);
     prices.forEach(el => {
         let productData = productosElegidos.filter(product => product.id === el.product);
         if (productData.length > 0) {
@@ -37,8 +35,8 @@ function cargarProductos(productosElegidos) {
             $template.querySelector(".producto-imagen").src = productData[0].images[0];
             $template.querySelector(".producto-imagen").alt = productData[0].name;
             $template.querySelector(".producto-detalles").querySelector(".producto-titulo").innerHTML = `${productData[0].name}`;
-            $template.querySelector(".producto-detalles").querySelector(".producto-precio").innerHTML = `${FormatoDeMoneda(el.unit_amount_decimal)} ${(el.currency).toUpperCase()}`;
-
+            $template.querySelector(".producto-detalles").querySelector(".producto-precio").innerHTML = `S/. ${FormatoDeMoneda(el.unit_amount_decimal)} ${(el.currency).toUpperCase()}`;
+			$template.querySelector(".producto-detalles").querySelector(".producto-agregar").id = productData[0].id;
             let $clone = $d.importNode($template, true);
             $fragment.appendChild($clone);
         } else {
@@ -110,9 +108,9 @@ function agregarAlCarrito(e) {
         text: "Producto agregado",
         duration: 3000,
         close: true,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
         style: {
           background: "linear-gradient(to right, #4b33a8, #785ce9)",
           borderRadius: "2rem",
@@ -120,21 +118,29 @@ function agregarAlCarrito(e) {
           fontSize: ".75rem"
         },
         offset: {
-            x: '1.5rem', // horizontal axis - can be a number or a string indicating unity. eg: '2em'
-            y: '1.5rem' // vertical axis - can be a number or a string indicating unity. eg: '2em'
+            x: '1.5rem',
+            y: '1.5rem'
           },
-        onClick: function(){} // Callback after click
+        onClick: function(){}
       }).showToast();
 
     const idBoton = e.currentTarget.id;
-    const productoAgregado = productos.find(producto => producto.id === idBoton);
-
+    const productoAgregado = products.find(producto => producto.id === idBoton);
+	
+	productoAgregado.precio = prices.filter(el => el.product === productoAgregado.id)
+    .map(el => `${FormatoDeMoneda(el.unit_amount_decimal)}`)
+	
+	
+	console.log(typeof productoAgregado.precio);
+	console.log(productoAgregado);
     if(productosEnCarrito.some(producto => producto.id === idBoton)) {
+		console.log(productosEnCarrito);
         const index = productosEnCarrito.findIndex(producto => producto.id === idBoton);
         productosEnCarrito[index].cantidad++;
     } else {
         productoAgregado.cantidad = 1;
         productosEnCarrito.push(productoAgregado);
+        console.log(productosEnCarrito);
     }
 
     actualizarNumerito();
