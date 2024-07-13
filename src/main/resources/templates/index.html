@@ -37,14 +37,25 @@
         </aside>
         <main>
             <h2 class="titulo-principal" id="titulo-principal">Todos los productos</h2>
-            <div id="contenedor-productos" class="contenedor-productos">
+			
+			<section class="contenedor-productos" id="contenedor-productos"></section>
+			
+            <template id="section-productos" class="section-productos">
                 <!-- Esto se va a rellenar con JS -->
-            </div>
+				<figure class="producto">
+				    <img class="producto-imagen">
+				    <figcaption class="producto-detalles">
+						<h3 class="producto-titulo"></h3>
+						<p class="producto-precio"></p>
+						<button class="producto-agregar" id="">Agregar</button>
+					</figcaption>
+				</figure>
+            </template>
         </main>
     </div>
     
 	<div th:replace="~{_frag/base::site-scripts}"></div>
-    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/main.js}" type ="module"></script>
 	
 </body>
 </html>

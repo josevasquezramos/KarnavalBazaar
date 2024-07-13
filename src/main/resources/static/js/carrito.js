@@ -1,3 +1,5 @@
+import KEYS from "./keys.js"
+
 let productosEnCarrito = localStorage.getItem("productos-en-carrito");
 productosEnCarrito = JSON.parse(productosEnCarrito);
 
@@ -20,7 +22,9 @@ function cargarProductosCarrito() {
         contenedorCarritoComprado.classList.add("disabled");
     
         contenedorCarritoProductos.innerHTML = "";
-    
+        
+        let cantidadTotalProductos = 0;
+		
         productosEnCarrito.forEach(producto => {
     
             const div = document.createElement("div");
@@ -47,6 +51,10 @@ function cargarProductosCarrito() {
             `;
     
             contenedorCarritoProductos.append(div);
+            
+            cantidadTotalProductos += producto.cantidad;
+            
+            getCantidadTotalProductos(cantidadTotalProductos);
         })
     
     actualizarBotonesEliminar();
@@ -59,6 +67,13 @@ function cargarProductosCarrito() {
         contenedorCarritoComprado.classList.add("disabled");
     }
 
+}
+
+function getCantidadTotalProductos(cantidadTotal) {
+    const elementoTotalProductos = document.getElementById("cantidad-total-productos");
+    if (elementoTotalProductos) {
+        elementoTotalProductos.textContent = cantidadTotal.toString(); // Mostrar la cantidad total como texto
+    }
 }
 
 cargarProductosCarrito();
@@ -125,7 +140,7 @@ function vaciarCarrito() {
 
 function actualizarTotal() {
     const totalCalculado = productosEnCarrito.reduce((acc, producto) => acc + (producto.precio * producto.cantidad), 0);
-    total.innerText = `$${totalCalculado}`;
+    total.innerText = 'S/. '+`${totalCalculado}`;
 }
 
 botonComprar.addEventListener("click", comprarCarrito);
@@ -140,3 +155,33 @@ function comprarCarrito() {
     contenedorCarritoComprado.classList.remove("disabled");
 
 }
+
+document.addEventListener("click", e => {
+    if (e.target.matches(".carrito-acciones-comprar")) {
+        let totalPrice = document.getElementById("total").textContent;
+        let cantidadTotal = 0;
+        const divCantidadTotal = document.getElementById("cantidad-total-productos");
+        if (divCantidadTotal) {
+		    cantidadTotal = parseInt(divCantidadTotal.textContent.trim(), 10);
+		}
+		
+        if (cantidadTotal > 0) {
+            Stripe(KEYS.public).redirectToCheckout({
+                lineItems: [{
+                    price: totalPrice,
+                    quantity: cantidadTotal,
+                }],
+                mode: 'payment',
+                successUrl: 'https://localhost:8080/message-responses/success.html',
+                cancelUrl: 'https://localhost:8080/message-responses/cancel.html',
+            })
+            .then(res => {
+                if (res.error) {
+                    document.getElementById("carrito-vacio").insertAdjacentElement("afterend", res.error.message);
+                }
+            });
+        } else {
+            console.error("La cantidad total de productos debe ser mayor que 0.");
+        }
+    }
+});

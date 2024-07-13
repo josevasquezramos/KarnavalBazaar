@@ -44,7 +44,7 @@
                         <button id="carrito-acciones-comprar" class="carrito-acciones-comprar">Comprar ahora</button>
                     </div>
                 </div>
-
+				<div id="cantidad-total-productos" class="disabled"></div>
                 <p id="carrito-comprado" class="carrito-comprado disabled">Muchas gracias por tu compra. <i class="bi bi-emoji-laughing"></i></p>
 
             </div>
@@ -52,7 +52,7 @@
     </div>
     
 	<div th:replace="~{_frag/base::site-scripts}"></div>
-	<script th:src="@{/js/carrito.js}"></script>
+	<script th:src="@{/js/carrito.js}" type="module"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

@@ -388,7 +388,79 @@ main {
 
 }
 
+.gracias-por-compra {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
 
+.gracias-icono {
+    color: green;
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.gracias-mensaje {
+    font-size: 1.5rem;
+    color: #333;
+    text-align: center;
+}
+
+.gracias-enlace {
+    text-decoration: none;
+    color: #007bff;
+    margin-top: 2rem;
+    font-size: 1.2rem;
+}
+
+.gracias-enlace:hover {
+    text-decoration: underline;
+}
+
+
+.cancel-container {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.cancel-container {
+    text-align: center;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-container .fa-solid {
+    font-size: 3rem;
+    color: #ff6347; /* Coral color */
+}
+
+.cancel-container .cancel-mensaje {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.cancel-container .cancel-enlace-inicio {
+    display: block;
+    margin-top: 1rem;
+    text-decoration: none;
+    color: #007bff; /* Bootstrap blue color */
+    transition: color 0.3s ease;
+}
+
+.cancel-container .cancel-enlace-inicio:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
 
 @media screen and (max-width: 400px) {
     .contenedor-productos {
