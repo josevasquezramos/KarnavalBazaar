@@ -6,12 +6,7 @@
     <div class="wrapper">
         <header th:replace="~{_frag/base::site-header}"></header>
         <aside>
-            <button class="close-menu" id="close-menu">
-                <i class="bi bi-x"></i>
-            </button>
-            <header>
-                <h1 class="logo">CarpiShop</h1>
-            </header>
+            <div th:replace="~{_frag/base::site-menu}"></div>
             <nav>
                 <ul>
                     <li>
@@ -26,9 +21,7 @@
                     </li>
                 </ul>
             </nav>
-            <footer>
-                <p class="texto-footer">© 2022 Carpi Coder</p>
-            </footer>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
         </aside>
         <main>
             <h2 class="titulo-principal">Carrito</h2>

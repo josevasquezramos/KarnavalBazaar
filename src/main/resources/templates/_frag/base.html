@@ -15,6 +15,19 @@
 	</button>
 </header>
 
+<div th:fragment = "site-menu"> 
+	<button class="close-menu" id="close-menu">
+	    <i class="bi bi-x"></i>
+	</button>
+	<header>
+	    <h1 class="logo">Bazar El Karnaval</h1>
+	</header>
+</div>
+
+<footer th:fragment = "site-footer">
+	<p class="texto-footer">© 2024 GRUPO APRTV</p>
+</footer>
+
 <div th:fragment = "site-scripts"> 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 	<script th:src="@{/js/menu.js}"></script>
