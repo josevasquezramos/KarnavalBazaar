@@ -73,7 +73,7 @@ function cargarProductosCarrito() {
 function getCantidadTotalProductos(cantidadTotal) {
     const elementoTotalProductos = document.getElementById("cantidad-total-productos");
     if (elementoTotalProductos) {
-        elementoTotalProductos.textContent = cantidadTotal.toString(); // Mostrar la cantidad total como texto
+        elementoTotalProductos.textContent = cantidadTotal.toString();
     }
 }
 
@@ -92,9 +92,9 @@ function eliminarDelCarrito(e) {
         text: "Producto eliminado",
         duration: 3000,
         close: true,
-        gravity: "top", // `top` or `bottom`
-        position: "right", // `left`, `center` or `right`
-        stopOnFocus: true, // Prevents dismissing of toast on hover
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
         style: {
           background: "linear-gradient(to right, #4b33a8, #785ce9)",
           borderRadius: "2rem",
@@ -102,10 +102,10 @@ function eliminarDelCarrito(e) {
           fontSize: ".75rem"
         },
         offset: {
-            x: '1.5rem', // horizontal axis - can be a number or a string indicating unity. eg: '2em'
-            y: '1.5rem' // vertical axis - can be a number or a string indicating unity. eg: '2em'
+            x: '1.5rem',
+            y: '1.5rem'
           },
-        onClick: function(){} // Callback after click
+        onClick: function(){}
       }).showToast();
 
     const idBoton = e.currentTarget.id;
@@ -138,7 +138,6 @@ function vaciarCarrito() {
       })
 }
 
-
 function actualizarTotal() {
     const totalCalculado = productosEnCarrito.reduce((acc, producto) => acc + (producto.precio * producto.cantidad), 0);
     total.innerText = 'S/. '+`${totalCalculado}`;
@@ -146,7 +145,27 @@ function actualizarTotal() {
 
 botonComprar.addEventListener("click", comprarCarrito);
 function comprarCarrito() {
+    const lineItems = productosEnCarrito.map(producto => ({
+        price: String(producto.id_precio),
+        quantity: producto.cantidad,
+    }));
 
+    Stripe(KEYS.public).redirectToCheckout({
+        lineItems: lineItems,
+        mode: "subscription",
+        successUrl: 'https://localhost:8080/message-responses/success.html',
+        cancelUrl: 'https://localhost:8080/message-responses/cancel.html',
+    })
+    .then(res => {
+        if (res.error) {
+            document.getElementById("carrito-vacio").insertAdjacentElement("afterend", res.error.message);
+        } else {
+            productosEnCarrito.length = 0;
+            localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
+            cargarProductosCarrito();
+        }
+    });
+    
     productosEnCarrito.length = 0;
     localStorage.setItem("productos-en-carrito", JSON.stringify(productosEnCarrito));
     
@@ -154,35 +173,4 @@ function comprarCarrito() {
     contenedorCarritoProductos.classList.add("disabled");
     contenedorCarritoAcciones.classList.add("disabled");
     contenedorCarritoComprado.classList.remove("disabled");
-
 }
-
-document.addEventListener("click", e => {
-    if (e.target.matches(".carrito-acciones-comprar")) {
-        let totalPrice = document.getElementById("total").textContent;
-        let cantidadTotal = 0;
-        const divCantidadTotal = document.getElementById("cantidad-total-productos");
-        if (divCantidadTotal) {
-		    cantidadTotal = parseInt(divCantidadTotal.textContent.trim(), 10);
-		}
-		
-        if (cantidadTotal > 0) {
-            Stripe(KEYS.public).redirectToCheckout({
-                lineItems: [{
-                    price: totalPrice,
-                    quantity: cantidadTotal,
-                }],
-                mode: 'payment',
-                successUrl: 'https://localhost:8080/message-responses/success.html',
-                cancelUrl: 'https://localhost:8080/message-responses/cancel.html',
-            })
-            .then(res => {
-                if (res.error) {
-                    document.getElementById("carrito-vacio").insertAdjacentElement("afterend", res.error.message);
-                }
-            });
-        } else {
-            console.error("La cantidad total de productos debe ser mayor que 0.");
-        }
-    }
-});

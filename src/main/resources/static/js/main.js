@@ -130,7 +130,9 @@ function agregarAlCarrito(e) {
 	productoAgregado.precio = prices.filter(el => el.product === productoAgregado.id)
     .map(el => `${FormatoDeMoneda(el.unit_amount_decimal)}`)
 	
-	
+	productoAgregado.id_precio = prices.filter(el => el.product === productoAgregado.id)
+    .map(el => `${el.id}`)
+    
 	console.log(typeof productoAgregado.precio);
 	console.log(productoAgregado);
     if(productosEnCarrito.some(producto => producto.id === idBoton)) {
