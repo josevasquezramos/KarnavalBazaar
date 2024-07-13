@@ -153,8 +153,8 @@ function comprarCarrito() {
     Stripe(KEYS.public).redirectToCheckout({
         lineItems: lineItems,
         mode: "subscription",
-        successUrl: 'https://localhost:8080/message-responses/success.html',
-        cancelUrl: 'https://localhost:8080/message-responses/cancel.html',
+        successUrl: 'http://localhost:8080/message-responses/openSuccess',
+        cancelUrl: 'http://localhost:8080/message-responses/openCancel',
     })
     .then(res => {
         if (res.error) {
