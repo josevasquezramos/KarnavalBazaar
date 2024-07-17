@@ -3,10 +3,11 @@ package com.karnaval.servicio;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.karnaval.entidad.Proveedor;
 import com.karnaval.repositorio.ProveedorRepository;
-
+@Service
 public class ProveedorServiceImpl implements ProveedorService {
 
 	@Autowired
